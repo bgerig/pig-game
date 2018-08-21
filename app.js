@@ -9,12 +9,13 @@ GAME RULES:
 
 */
 
-var scores, roundScore, activePlayer, dice, gameEnded;
+var scores, roundScore, activePlayer, dice, gameEnded, scoreToWin;
 
 scores = [0, 0];
 roundScore = 0;
 activePlayer = 0; //0 or 1
 gameEnded = false;
+scoreToWin = 100;
 
 diceDOM = document.querySelector('.dice');
 diceDOM.style.display = 'none';
@@ -52,7 +53,7 @@ document.querySelector('.btn-hold').addEventListener('click', function(){
         document.getElementById('score-' + activePlayer).textContent = scores[activePlayer];
 
         // Checks if player has won
-        if(scores[activePlayer] >= 10) {
+        if(scores[activePlayer] >= scoreToWin) {
             document.getElementById('name-' + activePlayer).textContent = 'WINNER!';
             gameEnded = true;
         } else {
