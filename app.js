@@ -15,7 +15,7 @@ scores = [0, 0];
 roundScore = 0;
 activePlayer = 0; //0 or 1
 gameEnded = false;
-scoreToWin = 100;
+scoreToWin = 10;
 
 diceDOM = document.querySelector('.dice');
 diceDOM.style.display = 'none';
@@ -50,11 +50,14 @@ document.querySelector('.btn-hold').addEventListener('click', function(){
         // Updates score of current player
         scores[activePlayer] += roundScore;
 
+        // Updates UI current score
         document.getElementById('score-' + activePlayer).textContent = scores[activePlayer];
 
         // Checks if player has won
         if(scores[activePlayer] >= scoreToWin) {
-            document.getElementById('name-' + activePlayer).textContent = 'WINNER!';
+            document.getElementById('name-' + activePlayer).textContent = 'Winner!';
+            document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
+            diceDOM.style.display = 'none';
             gameEnded = true;
         } else {
             endTurn();
@@ -64,12 +67,17 @@ document.querySelector('.btn-hold').addEventListener('click', function(){
 
 // When 'new game' is clicked
 document.querySelector('.btn-new').addEventListener('click', function(){
-    // Resets all scores to 0
+    // Resets round score to 0
     roundScore = 0;
+
     for(var i = 0; i < 2; i++){
+        // Resets player scores
         scores[i] = 0; 
+        // Resets UI global and current scores to zero
         document.getElementById('current-' + i).textContent = '0';
         document.getElementById('score-' + i).textContent = '0';
+        // Resets winner styles
+        document.querySelector('.player-' + i + '-panel').classList.remove('winner');
     }
     
     // Sets active player to be player 1
