@@ -9,16 +9,11 @@ GAME RULES:
 
 */
 
-var scores, roundScore, activePlayer, dice, gameEnded, scoreToWin;
+var scores, roundScore, activePlayer, dice, gameEnded;
+var scoreToWin = 100;
 
-scores = [0, 0];
-roundScore = 0;
-activePlayer = 0; //0 or 1
-gameEnded = false;
-scoreToWin = 10;
-
-diceDOM = document.querySelector('.dice');
-diceDOM.style.display = 'none';
+// Initializes game
+init();
 
 // When 'roll dice' is clicked
 document.querySelector('.btn-roll').addEventListener('click', function(){
@@ -27,16 +22,16 @@ document.querySelector('.btn-roll').addEventListener('click', function(){
         var dice = Math.floor(Math.random() * 6) + 1;
 
         // Displays dice image
-        diceDOM.style.display = 'block';
+        document.querySelector('.dice').style.display = 'block';
 
         // Changes dice image based on number rolled
-        diceDOM.setAttribute('src', 'dice-' + dice + '.png');
+        document.querySelector('.dice').setAttribute('src', 'dice-' + dice + '.png');
 
-        // If number rolled is 1, resets round score and ends player's turn
+        // If number rolled is 1, resets round score and ends turn
         if (dice === 1){
             roundScore = 0;
             endTurn();
-        // Else, updates current round score
+        // Else, updates round score
         } else {
             roundScore += dice;
             document.querySelector('#current-' + activePlayer).textContent = roundScore;
@@ -47,17 +42,17 @@ document.querySelector('.btn-roll').addEventListener('click', function(){
 // When 'hold' is clicked
 document.querySelector('.btn-hold').addEventListener('click', function(){
     if(!gameEnded){ 
-        // Updates score of current player
+        // Updates current player score
         scores[activePlayer] += roundScore;
 
-        // Updates UI current score
+        // Updates current score on UI
         document.getElementById('score-' + activePlayer).textContent = scores[activePlayer];
 
         // Checks if player has won
         if(scores[activePlayer] >= scoreToWin) {
             document.getElementById('name-' + activePlayer).textContent = 'Winner!';
             document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
-            diceDOM.style.display = 'none';
+            document.querySelector('.dice').style.display = 'none';
             gameEnded = true;
         } else {
             endTurn();
@@ -67,12 +62,7 @@ document.querySelector('.btn-hold').addEventListener('click', function(){
 
 // When 'new game' is clicked
 document.querySelector('.btn-new').addEventListener('click', function(){
-    // Resets round score to 0
-    roundScore = 0;
-
     for(var i = 0; i < 2; i++){
-        // Resets player scores
-        scores[i] = 0; 
         // Resets UI global and current scores to zero
         document.getElementById('current-' + i).textContent = '0';
         document.getElementById('score-' + i).textContent = '0';
@@ -80,8 +70,7 @@ document.querySelector('.btn-new').addEventListener('click', function(){
         document.querySelector('.player-' + i + '-panel').classList.remove('winner');
     }
     
-    // Sets active player to be player 1
-    activePlayer = 0;
+    // Sets active player to be player 1 on the UI
     document.querySelector('.player-0-panel').classList.add('active');
     document.querySelector('.player-1-panel').classList.remove('active');
 
@@ -89,11 +78,17 @@ document.querySelector('.btn-new').addEventListener('click', function(){
     document.getElementById('name-0').textContent = 'Player 1';
     document.getElementById('name-1').textContent = 'Player 2';
 
-    // Hides dice at the start
-    diceDOM.style.display = 'none';
-
-    gameEnded = false;
+    init();
 });
+
+// Initializes game, sets the game scores to zero and hides dice from UI
+function init() {
+    scores = [0, 0];
+    roundScore = 0;
+    activePlayer = 0; //0 or 1
+    gameEnded = false;
+    document.querySelector('.dice').style.display = 'none';
+}
 
 // Ends current player's turn
 function endTurn () {
