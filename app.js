@@ -10,7 +10,6 @@ GAME RULES:
 */
 
 var scores, roundScore, activePlayer, dice, gameEnded;
-var scoreToWin = 100;
 
 // Initializes game
 init();
@@ -48,8 +47,11 @@ document.querySelector('.btn-hold').addEventListener('click', function(){
         // Updates current score on UI
         document.getElementById('score-' + activePlayer).textContent = scores[activePlayer];
 
+        // If no input from user, then winningScore is set to 100
+        var winningScore = document.querySelector('.winning-score').value ? document.querySelector('.winning-score').value : '100';
+
         // Checks if player has won
-        if(scores[activePlayer] >= scoreToWin) {
+        if(scores[activePlayer] >= winningScore) {
             document.getElementById('name-' + activePlayer).textContent = 'Winner!';
             document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
             document.querySelector('.dice').style.display = 'none';
